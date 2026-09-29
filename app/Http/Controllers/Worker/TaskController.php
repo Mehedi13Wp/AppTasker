@@ -8,8 +8,8 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 class TaskController extends Controller {
  public function show(Task $task): View {
-  abort_unless($task->status === 'available',404);
   $workerTask=WorkerTask::where('task_id',$task->id)->where('user_id',auth()->id())->first();
+  abort_unless($task->status === 'available' || $workerTask,404);
   $submission=$workerTask?->submission;
   return view('worker.task-show',compact('task','workerTask','submission'));
  }
