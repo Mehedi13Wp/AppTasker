@@ -27,4 +27,4 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 Route::middleware(['auth', 'role:admin'])->get('/admin', fn () => 'AppTasker Admin Dashboard')->name('admin.dashboard');
 Route::middleware(['auth', 'role:client'])->get('/client', fn () => view('client.dashboard'))->name('client.dashboard');
-Route::middleware(['auth', 'role:worker'])->get('/worker', fn () => 'AppTasker Worker Dashboard')->name('worker.dashboard');
+Route::middleware(['auth', 'role:worker'])->get('/worker', fn () => view('worker.dashboard'))->name('worker.dashboard');
