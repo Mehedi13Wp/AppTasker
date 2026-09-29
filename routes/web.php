@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Admin\AdminWithdrawalController;
 use App\Http\Controllers\Admin\AdminCampaignController;
 use App\Http\Controllers\Worker\WorkerDashboardController;
+use App\Http\Controllers\Client\ClientDashboardController;
 use App\Http\Controllers\Worker\TaskController;
 use App\Http\Controllers\Worker\TaskSubmissionController;
 use Illuminate\Support\Facades\Route;
@@ -47,7 +48,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/campaigns', [AdminCampaignController::class, 'index'])->name('admin.campaigns');
     Route::patch('/admin/campaigns/{campaign}', [AdminCampaignController::class, 'update'])->name('admin.campaigns.update');
 });
-Route::middleware(['auth', 'role:client'])->get('/client', fn () => view('client.dashboard'))->name('client.dashboard');
+Route::middleware(['auth', 'role:client'])->group(function () {
+    Route::get('/client', [ClientDashboardController::class, 'index'])->name('client.dashboard');
+    Route::post('/client/campaigns', [ClientDashboardController::class, 'store'])->name('client.campaigns.store');
+});
 Route::middleware(['auth', 'role:worker'])->group(function () {
     Route::get('/worker', [WorkerDashboardController::class, 'index'])->name('worker.dashboard');
     Route::get('/worker/history', [WorkerDashboardController::class, 'history'])->name('worker.history');
