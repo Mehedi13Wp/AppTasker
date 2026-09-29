@@ -20,6 +20,7 @@ class AdminDashboardController extends Controller {
   return view('admin.submissions',compact('submissions'));
  }
  public function review(Request $request,TaskSubmission $submission): RedirectResponse {
+  abort_if($submission->status!=='pending',422,'This submission has already been reviewed.');
   $data=$request->validate(['status'=>['required','in:approved,rejected'],'verification_notes'=>['nullable','string','max:1000']]);
   $submission->update(['status'=>$data['status'],'verification_notes'=>$data['verification_notes']??null]);
   $submission->workerTask->update(['status'=>$data['status']==='approved'?'completed':'rejected','completed_at'=>$data['status']==='approved'?now():null]);
