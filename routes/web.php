@@ -3,9 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', fn () => view('welcome'))->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -16,6 +14,6 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/admin', fn () => 'AppTasker Admin Dashboard')->middleware('auth')->name('admin.dashboard');
-Route::get('/client', fn () => 'AppTasker Client Dashboard')->middleware('auth')->name('client.dashboard');
-Route::get('/worker', fn () => 'AppTasker Worker Dashboard')->middleware('auth')->name('worker.dashboard');
+Route::middleware(['auth', 'role:admin'])->get('/admin', fn () => 'AppTasker Admin Dashboard')->name('admin.dashboard');
+Route::middleware(['auth', 'role:client'])->get('/client', fn () => view('client.dashboard'))->name('client.dashboard');
+Route::middleware(['auth', 'role:worker'])->get('/worker', fn () => 'AppTasker Worker Dashboard')->name('worker.dashboard');
