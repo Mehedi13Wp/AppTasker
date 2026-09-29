@@ -10,7 +10,8 @@ class TaskController extends Controller {
  public function show(Task $task): View {
   abort_unless($task->status === 'available',404);
   $workerTask=WorkerTask::where('task_id',$task->id)->where('user_id',auth()->id())->first();
-  return view('worker.task-show',compact('task','workerTask'));
+  $submission=$workerTask?->submission;
+  return view('worker.task-show',compact('task','workerTask','submission'));
  }
  public function start(Task $task): RedirectResponse {
   abort_unless($task->status === 'available',404);
