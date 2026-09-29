@@ -8,6 +8,7 @@ use App\Models\WorkerTask;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class AdminDashboardController extends Controller {
  public function index(): View {
   $stats=['workers'=>User::where('role','worker')->count(),'clients'=>User::where('role','client')->count(),'tasks'=>Task::count(),'pending'=>TaskSubmission::where('status','pending')->count()];
@@ -18,6 +19,11 @@ class AdminDashboardController extends Controller {
  public function submissions(): View {
   $submissions=TaskSubmission::with(['workerTask.task','workerTask.user'])->latest('submitted_at')->paginate(25);
   return view('admin.submissions',compact('submissions'));
+ }
+ public function download(TaskSubmission $submission): BinaryFileResponse {
+  $path=storage_path('app/private/task-results/'.$submission->result_file);
+  abort_unless(is_file($path),404);
+  return response()->download($path,$submission->original_name ?: basename($path));
  }
  public function review(Request $request,TaskSubmission $submission): RedirectResponse {
   abort_if($submission->status!=='pending',422,'This submission has already been reviewed.');
