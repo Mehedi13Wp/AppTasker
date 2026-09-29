@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Worker\WorkerDashboardController;
 use App\Http\Controllers\Worker\TaskController;
 use App\Http\Controllers\Worker\TaskSubmissionController;
@@ -33,6 +34,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/submissions', [AdminDashboardController::class, 'submissions'])->name('admin.submissions');
     Route::patch('/admin/submissions/{submission}', [AdminDashboardController::class, 'review'])->name('admin.submissions.review');
+    Route::get('/admin/tasks', [AdminManagementController::class, 'tasks'])->name('admin.tasks');
+    Route::post('/admin/tasks', [AdminManagementController::class, 'storeTask'])->name('admin.tasks.store');
+    Route::patch('/admin/tasks/{task}/status', [AdminManagementController::class, 'taskStatus'])->name('admin.tasks.status');
+    Route::get('/admin/workers', [AdminManagementController::class, 'workers'])->name('admin.workers');
+    Route::get('/admin/clients', [AdminManagementController::class, 'clients'])->name('admin.clients');
+    Route::patch('/admin/users/{user}/status', [AdminManagementController::class, 'userStatus'])->name('admin.users.status');
 });
 Route::middleware(['auth', 'role:client'])->get('/client', fn () => view('client.dashboard'))->name('client.dashboard');
 Route::middleware(['auth', 'role:worker'])->group(function () {
