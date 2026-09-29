@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Worker\WorkerDashboardController;
 use App\Http\Controllers\Worker\TaskController;
 use App\Http\Controllers\Worker\TaskSubmissionController;
@@ -28,7 +29,11 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::middleware(['auth', 'role:admin'])->get('/admin', fn () => 'AppTasker Admin Dashboard')->name('admin.dashboard');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/submissions', [AdminDashboardController::class, 'submissions'])->name('admin.submissions');
+    Route::patch('/admin/submissions/{submission}', [AdminDashboardController::class, 'review'])->name('admin.submissions.review');
+});
 Route::middleware(['auth', 'role:client'])->get('/client', fn () => view('client.dashboard'))->name('client.dashboard');
 Route::middleware(['auth', 'role:worker'])->group(function () {
     Route::get('/worker', [WorkerDashboardController::class, 'index'])->name('worker.dashboard');
