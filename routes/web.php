@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminManagementController;
+use App\Http\Controllers\Admin\AdminWithdrawalController;
 use App\Http\Controllers\Worker\WorkerDashboardController;
 use App\Http\Controllers\Worker\TaskController;
 use App\Http\Controllers\Worker\TaskSubmissionController;
@@ -40,6 +41,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/workers', [AdminManagementController::class, 'workers'])->name('admin.workers');
     Route::get('/admin/clients', [AdminManagementController::class, 'clients'])->name('admin.clients');
     Route::patch('/admin/users/{user}/status', [AdminManagementController::class, 'userStatus'])->name('admin.users.status');
+    Route::get('/admin/withdrawals', [AdminWithdrawalController::class, 'index'])->name('admin.withdrawals');
+    Route::patch('/admin/withdrawals/{withdrawal}', [AdminWithdrawalController::class, 'update'])->name('admin.withdrawals.update');
 });
 Route::middleware(['auth', 'role:client'])->get('/client', fn () => view('client.dashboard'))->name('client.dashboard');
 Route::middleware(['auth', 'role:worker'])->group(function () {
@@ -47,6 +50,7 @@ Route::middleware(['auth', 'role:worker'])->group(function () {
     Route::get('/worker/history', [WorkerDashboardController::class, 'history'])->name('worker.history');
     Route::get('/worker/wallet', [WorkerDashboardController::class, 'wallet'])->name('worker.wallet');
     Route::get('/worker/profile', [WorkerDashboardController::class, 'profile'])->name('worker.profile');
+    Route::post('/worker/wallet/withdraw', [WorkerDashboardController::class, 'withdraw'])->name('worker.withdraw');
     Route::get('/worker/tasks/{task}', [TaskController::class, 'show'])->name('worker.tasks.show');
     Route::post('/worker/tasks/{task}/start', [TaskController::class, 'start'])->name('worker.tasks.start');
     Route::post('/worker/tasks/{task}/submit', [TaskSubmissionController::class, 'store'])->name('worker.tasks.submit');
