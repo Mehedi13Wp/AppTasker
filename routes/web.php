@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Admin\AdminWithdrawalController;
 use App\Http\Controllers\Admin\AdminCampaignController;
+use App\Http\Controllers\Admin\PaymentSettingsController;
 use App\Http\Controllers\Worker\WorkerDashboardController;
 use App\Http\Controllers\Client\ClientDashboardController;
 use App\Http\Controllers\Worker\TaskController;
@@ -47,6 +48,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::patch('/admin/withdrawals/{withdrawal}', [AdminWithdrawalController::class, 'update'])->name('admin.withdrawals.update');
     Route::get('/admin/campaigns', [AdminCampaignController::class, 'index'])->name('admin.campaigns');
     Route::patch('/admin/campaigns/{campaign}', [AdminCampaignController::class, 'update'])->name('admin.campaigns.update');
+    Route::get('/admin/payment-settings', [PaymentSettingsController::class, 'index'])->name('admin.payment-settings');
+    Route::patch('/admin/payment-settings', [PaymentSettingsController::class, 'update'])->name('admin.payment-settings.update');
 });
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('/client', [ClientDashboardController::class, 'index'])->name('client.dashboard');
