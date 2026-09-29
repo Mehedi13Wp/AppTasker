@@ -32,6 +32,9 @@ Route::middleware(['auth', 'role:admin'])->get('/admin', fn () => 'AppTasker Adm
 Route::middleware(['auth', 'role:client'])->get('/client', fn () => view('client.dashboard'))->name('client.dashboard');
 Route::middleware(['auth', 'role:worker'])->group(function () {
     Route::get('/worker', [WorkerDashboardController::class, 'index'])->name('worker.dashboard');
+    Route::get('/worker/history', [WorkerDashboardController::class, 'history'])->name('worker.history');
+    Route::get('/worker/wallet', [WorkerDashboardController::class, 'wallet'])->name('worker.wallet');
+    Route::get('/worker/profile', [WorkerDashboardController::class, 'profile'])->name('worker.profile');
     Route::get('/worker/tasks/{task}', [TaskController::class, 'show'])->name('worker.tasks.show');
     Route::post('/worker/tasks/{task}/start', [TaskController::class, 'start'])->name('worker.tasks.start');
     Route::post('/worker/tasks/{task}/submit', [TaskSubmissionController::class, 'store'])->name('worker.tasks.submit');
