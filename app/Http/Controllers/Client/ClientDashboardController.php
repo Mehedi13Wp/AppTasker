@@ -14,9 +14,9 @@ class ClientDashboardController extends Controller {
  }
  public function store(Request $request): RedirectResponse {
   $d=$request->validate(['app_name'=>'required|string|max:150','app_url'=>'required|url|max:1000','plan'=>'required|in:starter,growth,pro']);
-  $plans=['starter'=>['amount'=>5,'days'=>7],'growth'=>['amount'=>10,'days'=>15],'pro'=>['amount'=>15,'days'=>30]];
+  $plans=['starter'=>['amount'=>500,'days'=>7],'growth'=>['amount'=>1000,'days'=>15],'pro'=>['amount'=>1500,'days'=>30]];
   $p=$plans[$d['plan']];
   Campaign::create(['user_id'=>auth()->id(),'app_name'=>$d['app_name'],'app_url'=>$d['app_url'],'plan'=>$d['plan'],'amount'=>$p['amount'],'duration_days'=>$p['days'],'status'=>'pending']);
-  return back()->with('success','Campaign submitted for admin review.');
+  return back()->with('success','Campaign created. Complete the bKash payment when payment checkout is enabled.');
  }
 }
