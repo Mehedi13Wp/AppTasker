@@ -35,12 +35,12 @@ class WorkerDashboardController extends Controller {
   return view('worker.wallet',compact('approved','balance','availableBalance','withdrawals'));
  }
  public function withdraw(Request $request): RedirectResponse {
-  $d=$request->validate(['amount'=>'required|numeric|min:1','method'=>'required|string|max:50','account'=>'required|string|max:150']);
+  $d=$request->validate(['amount'=>'required|numeric|min:10','account'=>'required|string|max:150']);
   $approved=WorkerTask::with(['task','submission'])->where('user_id',auth()->id())->get()->filter(fn($item)=>$item->submission?->status==='approved');
   $earned=$approved->sum(fn($item)=>(float)$item->task->reward);
   $reserved=(float)WithdrawalRequest::where('user_id',auth()->id())->whereIn('status',['pending','approved'])->sum('amount');
   abort_if((float)$d['amount']>max(0,$earned-$reserved),422,'Insufficient available balance.');
-  WithdrawalRequest::create(['user_id'=>auth()->id(),'amount'=>$d['amount'],'method'=>$d['method'],'account'=>$d['account'],'status'=>'pending']);
+  WithdrawalRequest::create(['user_id'=>auth()->id(),'amount'=>$d['amount'],'method'=>'bKash','account'=>$d['account'],'status'=>'pending']);
   return back()->with('success','Withdrawal request submitted.');
  }
  public function profile(): View {
