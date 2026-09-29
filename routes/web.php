@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Worker\WorkerDashboardController;
 use App\Http\Controllers\Worker\TaskController;
+use App\Http\Controllers\Worker\TaskSubmissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,4 +34,5 @@ Route::middleware(['auth', 'role:worker'])->group(function () {
     Route::get('/worker', [WorkerDashboardController::class, 'index'])->name('worker.dashboard');
     Route::get('/worker/tasks/{task}', [TaskController::class, 'show'])->name('worker.tasks.show');
     Route::post('/worker/tasks/{task}/start', [TaskController::class, 'start'])->name('worker.tasks.start');
+    Route::post('/worker/tasks/{task}/submit', [TaskSubmissionController::class, 'store'])->name('worker.tasks.submit');
 });
