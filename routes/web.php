@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminCampaignController;
 use App\Http\Controllers\Admin\PaymentSettingsController;
 use App\Http\Controllers\Worker\WorkerDashboardController;
 use App\Http\Controllers\Client\ClientDashboardController;
+use App\Http\Controllers\Client\BkashPaymentController;
 use App\Http\Controllers\Worker\TaskController;
 use App\Http\Controllers\Worker\TaskSubmissionController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('/client', [ClientDashboardController::class, 'index'])->name('client.dashboard');
     Route::post('/client/campaigns', [ClientDashboardController::class, 'store'])->name('client.campaigns.store');
+    Route::get('/client/campaigns/{campaign}/pay', [BkashPaymentController::class, 'checkout'])->name('client.bkash.checkout');
+    Route::post('/client/campaigns/{campaign}/demo-pay', [BkashPaymentController::class, 'demoPay'])->name('client.bkash.demo-pay');
 });
 Route::middleware(['auth', 'role:worker'])->group(function () {
     Route::get('/worker', [WorkerDashboardController::class, 'index'])->name('worker.dashboard');
