@@ -12,7 +12,7 @@ class TaskSubmissionController extends Controller {
   if(!$workerTask->app_completed) return back()->with('error','Complete the task inside the assigned Android app before submitting.');
   if(TaskSubmission::where('worker_task_id',$workerTask->id)->exists()) return back()->with('error','This task has already been submitted.');
   $validated=$request->validate(['result_file'=>['required','file','max:102400']]);
-  $file=$validated['result_file']; $path=$file->store('task-results','public');
+  $file=$validated['result_file']; $stored=$file->store('task-results','local'); $path=basename($stored);
   TaskSubmission::create(['worker_task_id'=>$workerTask->id,'result_file'=>$path,'original_name'=>$file->getClientOriginalName(),'mime_type'=>$file->getMimeType(),'file_size'=>$file->getSize(),'status'=>'pending','submitted_at'=>now()]);
   $workerTask->update(['status'=>'submitted','submitted_at'=>now()]);
   return redirect()->route('worker.tasks.show',$task)->with('success','Result submitted successfully. Verification is pending.');
