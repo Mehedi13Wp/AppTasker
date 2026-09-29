@@ -38,6 +38,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/submissions', [AdminDashboardController::class, 'submissions'])->name('admin.submissions');
+    Route::get('/admin/submissions/{submission}/download', [AdminDashboardController::class, 'download'])->name('admin.submissions.download');
     Route::patch('/admin/submissions/{submission}', [AdminDashboardController::class, 'review'])->name('admin.submissions.review');
     Route::get('/admin/tasks', [AdminManagementController::class, 'tasks'])->name('admin.tasks');
     Route::post('/admin/tasks', [AdminManagementController::class, 'storeTask'])->name('admin.tasks.store');
