@@ -9,7 +9,8 @@ use Illuminate\View\View;
 class AdminManagementController extends Controller {
  public function tasks(): View { $tasks=Task::latest()->paginate(25); return view('admin.tasks',compact('tasks')); }
  public function storeTask(Request $request): RedirectResponse {
-  $d=$request->validate(['title'=>'required|string|max:150','type'=>'required|in:image_resize,video_resize,image_convert','description'=>'nullable|string|max:1000','reward'=>'required|numeric|min:0','slot'=>'required|in:morning,afternoon,evening','status'=>'required|in:available,paused']);
+  $d=$request->validate(['title'=>'required|string|max:150','type'=>'required|in:image_resize,video_resize,image_convert','description'=>'nullable|string|max:1000','reward'=>'required|numeric|min:1|max:10000','slot'=>'required|in:morning,afternoon,evening','status'=>'required|in:available,paused','requirements'=>'nullable|string|max:2000']);
+  if(!empty($d['requirements'])){ $lines=preg_split('/\r\n|\r|\n/',$d['requirements']); $d['requirements']=array_values(array_filter(array_map('trim',$lines))); } else { $d['requirements']=null; }
   Task::create($d); return back()->with('success','Task created.');
  }
  public function taskStatus(Task $task): RedirectResponse { $task->update(['status'=>$task->status==='available'?'paused':'available']); return back()->with('success','Task status updated.'); }
