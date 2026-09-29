@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'bkash' => [
+        'mode' => env('BKASH_MODE', 'demo'),
+        'merchant_number' => env('BKASH_MERCHANT_NUMBER'),
+        'app_key' => env('BKASH_APP_KEY'),
+        'app_secret' => env('BKASH_APP_SECRET'),
+        'username' => env('BKASH_USERNAME'),
+        'password' => env('BKASH_PASSWORD'),
+    ],
+
 ];
