@@ -32,8 +32,8 @@
  <section class="hero"><div><h2>Ready to complete today's tasks?</h2><p>Your daily task limit is 9. Complete quality work to grow your trust level and earnings.</p></div><div class="quota"><div class="quota-row"><span>Daily progress</span><span>{{ $todayTasks->count() }} / 9</span></div><div class="bar"><i></i></div></div></section>
  <section class="stats">
   <div class="stat"><div class="stat-top"><span class="label">Available Tasks</span><span class="icon">✓</span></div><div class="value">{{ $availableCount }}</div><div class="positive">{{ $availableCount > 0 ? "Tasks ready to start" : "Waiting for new tasks" }}</div></div>
-  <div class="stat"><div class="stat-top"><span class="label">Today's Earnings</span><span class="icon">$</span></div><div class="value">৳{{ number_format($todayEarnings,2) }}</div><div class="positive">Ready to earn</div></div>
-  <div class="stat"><div class="stat-top"><span class="label">Completed Today</span><span class="icon">↗</span></div><div class="value">{{ $submittedToday }} / 9</div><div class="positive">{{ max(0,9-$todayTasks->count()) }} tasks remaining</div></div>
+  <div class="stat"><div class="stat-top"><span class="label">Today's Earnings</span><span class="icon">৳</span></div><div class="value">৳{{ number_format($todayEarnings,2) }}</div><div class="positive">Ready to earn</div></div>
+  <div class="stat"><div class="stat-top"><span class="label">Completed Today</span><span class="icon">↗</span></div><div class="value">{{ $completedToday }} / 9</div><div class="positive">{{ max(0,9-$todayTasks->count()) }} tasks remaining</div></div>
   <div class="stat"><div class="stat-top"><span class="label">Trust Level</span><span class="icon">★</span></div><div class="value">{{ $trustLevel }}</div><div class="positive">Build your reputation</div></div>
  </section>
  <section class="content-grid">
