@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 class ClientDashboardController extends Controller {
  public function index(): View {
+  Campaign::where('user_id',auth()->id())->where('status','active')->whereNotNull('ends_at')->where('ends_at','<=',now())->update(['status'=>'completed']);
   $campaigns=Campaign::where('user_id',auth()->id())->latest()->get();
   $active=$campaigns->where('status','active')->first();
   $spent=(float)$campaigns->sum('amount');
@@ -16,7 +17,7 @@ class ClientDashboardController extends Controller {
   $d=$request->validate(['app_name'=>'required|string|max:150','app_url'=>'required|url|max:1000','plan'=>'required|in:starter,growth,pro']);
   $plans=['starter'=>['amount'=>500,'days'=>7],'growth'=>['amount'=>1000,'days'=>15],'pro'=>['amount'=>1500,'days'=>30]];
   $p=$plans[$d['plan']];
-  Campaign::create(['user_id'=>auth()->id(),'app_name'=>$d['app_name'],'app_url'=>$d['app_url'],'plan'=>$d['plan'],'amount'=>$p['amount'],'duration_days'=>$p['days'],'status'=>'pending']);
-  return back()->with('success','Campaign created. Complete the bKash payment when payment checkout is enabled.');
+  Campaign::create(['user_id'=>auth()->id(),'app_name'=>$d['app_name'],'app_url'=>$d['app_url'],'plan'=>$d['plan'],'amount'=>$p['amount'],'duration_days'=>$p['days'],'status'=>'pending','payment_status'=>'unpaid','payment_method'=>'bkash']);
+  return back()->with('success','Campaign created. Complete the bKash payment to send it for admin review.');
  }
 }
