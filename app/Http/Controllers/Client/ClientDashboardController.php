@@ -10,7 +10,7 @@ class ClientDashboardController extends Controller {
   Campaign::where('user_id',auth()->id())->where('status','active')->whereNotNull('ends_at')->where('ends_at','<=',now())->update(['status'=>'completed']);
   $campaigns=Campaign::where('user_id',auth()->id())->latest()->get();
   $active=$campaigns->where('status','active')->first();
-  $spent=(float)$campaigns->sum('amount');
+  $spent=(float)$campaigns->where('payment_status','paid')->sum('amount');
   return view('client.dashboard',compact('campaigns','active','spent'));
  }
  public function store(Request $request): RedirectResponse {
