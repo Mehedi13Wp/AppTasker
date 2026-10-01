@@ -35,7 +35,7 @@ class WorkerDashboardController extends Controller {
   return view('worker.wallet',compact('approved','balance','availableBalance','withdrawals'));
  }
  public function withdraw(Request $request): RedirectResponse {
-  $d=$request->validate(['amount'=>'required|numeric|min:10','account'=>'required|string|max:150']);
+  $d=$request->validate(['amount'=>'required|numeric|min:10','account'=>['required','regex:/^01[3-9][0-9]{8}$/']]);
   $approved=WorkerTask::with(['task','submission'])->where('user_id',auth()->id())->get()->filter(fn($item)=>$item->submission?->status==='approved');
   $earned=$approved->sum(fn($item)=>(float)$item->task->reward);
   $reserved=(float)WithdrawalRequest::where('user_id',auth()->id())->whereIn('status',['pending','approved','paid'])->sum('amount');
