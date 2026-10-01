@@ -13,18 +13,7 @@ use App\Http\Controllers\Worker\TaskController;
 use App\Http\Controllers\Worker\TaskSubmissionController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    if (! auth()->check()) {
-        return redirect()->route('login');
-    }
-
-    return match (auth()->user()->role) {
-        'admin' => redirect()->route('admin.dashboard'),
-        'worker' => redirect()->route('worker.dashboard'),
-        'client' => redirect()->route('client.dashboard'),
-        default => redirect()->route('login'),
-    };
-})->name('home');
+Route::view('/', 'home')->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
