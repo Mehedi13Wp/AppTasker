@@ -16,7 +16,9 @@ class TaskController extends Controller {
  public function start(Task $task): RedirectResponse {
   abort_unless($task->status === 'available',404);
   $todayCount=WorkerTask::where('user_id',auth()->id())->whereDate('started_at',today())->count();
+  $slotCount=WorkerTask::where('user_id',auth()->id())->whereDate('started_at',today())->whereHas('task',fn($q)=>$q->where('slot',$task->slot))->count();
   if($todayCount>=9) return back()->with('error','Daily task limit reached.');
+  if($slotCount>=3) return back()->with('error','This time slot already has 3 tasks today.');
   WorkerTask::firstOrCreate(['task_id'=>$task->id,'user_id'=>auth()->id()],['status'=>'started','token'=>(string)Str::uuid(),'started_at'=>now()]);
   return redirect()->route('worker.tasks.show',$task)->with('success','Task started successfully.');
  }
