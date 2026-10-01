@@ -53,17 +53,11 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if ($request->session()->has('auth_last_attempt') && now()->diffInSeconds($request->session()->get('auth_last_attempt')) < 2) {
-            return back()->withErrors(['email' => 'Please wait a moment before trying again.'])->onlyInput('email');
-        }
-        $request->session()->put('auth_last_attempt', now());
-
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->onlyInput('email');
         }
 
         $request->session()->regenerate();
-        $request->session()->forget('auth_last_attempt');
         $user = $request->user();
 
         if (! $user->isActive()) {
