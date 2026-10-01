@@ -51,7 +51,6 @@
     @endforelse
    </div>
    </div>
-  </div>
   <aside class="panel"><div class="panel-head"><h2>Today's slots</h2></div>
    <div class="slot"><span class="slot-icon">☀</span><div><strong>Morning</strong><small>3 tasks max</small></div><span class="status">Open</span></div>
    <div class="slot"><span class="slot-icon">◐</span><div><strong>Afternoon</strong><small>3 tasks max</small></div><span class="status">Open</span></div>
